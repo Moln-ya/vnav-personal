@@ -1,0 +1,96 @@
+C++ Warm-up Exercises
+
+1. Operators
+
+1.1
+After:
+    int i = 0, j;
+    j = ++i;
+    j = i++;
+
+The final values are:
+    i = 2
+    j = 1
+
+++i increments i before its value is used, while i++ uses the old
+value first and increments i afterwards.
+
+1.2
+The code prints:
+    b
+
+The condition i < 42 is false when i is 42, so the conditional
+operator selects "b".
+
+
+2. References and Pointers
+
+2.1
+The code prints:
+    10 10
+
+ri is a reference to i, so assigning 10 to ri also changes i to 10.
+
+2.2
+The code prints:
+    1764
+
+j points to i. Therefore *j is 42, and the assignment computes
+42 * 42 = 1764.
+
+2.3
+The code prints:
+    0
+
+*(i+1) is i[1] = 24 and i[3] = 24, therefore:
+    i[2] = 24 - 24 = 0.
+
+2.4
+The code prints:
+    0
+
+reset() takes its argument by reference, so setting i to 0 inside the
+function directly modifies j.
+
+
+3. Numbers
+
+3.1
+short, int, long, and long long are signed integer types with different
+minimum ranges and conversion ranks. Their exact sizes are
+implementation-dependent. On many 64-bit Linux systems, short is
+typically 16 bits, int 32 bits, and long and long long 64 bits.
+
+3.2
+float and double are floating-point types. double normally provides
+greater precision and range than float. A float commonly provides about
+7 decimal digits of precision, while a double commonly provides about
+15-16 digits.
+
+After:
+    int i;
+    i = 3.14;
+
+the value of i is:
+    3
+
+The fractional part is discarded during conversion from double to int.
+
+3.3
+A signed integer type can represent negative and positive values,
+whereas an unsigned type represents only non-negative values.
+
+Assuming an 8-bit unsigned char:
+    unsigned char c = -1;
+
+the value of c is:
+    255
+
+because conversion to the unsigned 8-bit type is performed modulo 256.
+
+3.4
+The final value of i is:
+    0
+
+The initial value 42 is non-zero and therefore evaluates to true in the
+if condition, so the first branch is executed.
