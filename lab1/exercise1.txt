@@ -1,0 +1,5 @@
+LAB1 Shell Exercise 1
+
+1. Total number of lines: 19567
+2. Total number of words: 97676
+3. Number of non-blank lines: 14338
