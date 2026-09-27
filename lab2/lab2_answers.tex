@@ -1,0 +1,755 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{enumitem}
+
+\title{VNAV LAB2 -- ROS and Rigid Transformations}
+\author{Junxi Li}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Deliverable 1: Nodes, Topics, and Launch Files}
+
+\subsection{Nodes in the Static Scenario}
+
+Ignoring the \texttt{/rosout} node, the nodes running in the static
+two-drone scenario are
+
+\begin{verbatim}
+/av1broadcaster
+/av2broadcaster
+/plots_publisher_node
+/rviz
+\end{verbatim}
+
+The two broadcaster nodes publish the static transforms from the world
+frame to the two aerial-vehicle frames. The plots publisher generates
+the drone meshes and trajectory markers, while RViz visualizes the
+published information.
+
+\subsection{Running the Static Scenario without roslaunch}
+
+The same static scenario can be launched manually using separate
+terminals.
+
+Terminal 1:
+\begin{verbatim}
+roscore
+\end{verbatim}
+
+Terminal 2:
+\begin{verbatim}
+rosrun tf2_ros static_transform_publisher \
+1 0 0 0 0 0 1 world av1 __name:=av1broadcaster
+\end{verbatim}
+
+Terminal 3:
+\begin{verbatim}
+rosrun tf2_ros static_transform_publisher \
+0 0 1 0 0 0 1 world av2 __name:=av2broadcaster
+\end{verbatim}
+
+Terminal 4:
+\begin{verbatim}
+rosrun two_drones_pkg plots_publisher_node
+\end{verbatim}
+
+Terminal 5:
+\begin{verbatim}
+rviz -d $(rospack find two_drones_pkg)/config/default.rviz
+\end{verbatim}
+
+\subsection{ROS Topics}
+
+The node \texttt{/av1broadcaster} publishes the transform between
+\texttt{world} and \texttt{av1} on \texttt{/tf\_static}. Similarly,
+\texttt{/av2broadcaster} publishes the transform between
+\texttt{world} and \texttt{av2}.
+
+The node \texttt{/plots\_publisher\_node} obtains transform information
+from TF and publishes a message of type
+\texttt{visualization\_msgs/MarkerArray} on the topic
+\texttt{/visuals}.
+
+RViz subscribes to the TF information and to \texttt{/visuals}. The
+topic that causes the two drone meshes to appear in RViz is therefore
+
+\[
+\boxed{\texttt{/visuals}}.
+\]
+
+\subsection{Effect of Omitting static:=True}
+
+The launch file defines the argument \texttt{static} with default value
+\texttt{false}. When \texttt{static:=True}, the nodes
+\texttt{/av1broadcaster} and \texttt{/av2broadcaster} are launched and
+publish fixed transforms.
+
+When the argument is omitted, its value is false. The launch-file
+\texttt{if} condition therefore disables the two static broadcasters,
+while the \texttt{unless} condition enables
+\texttt{frames\_publisher\_node}. Consequently, the transforms become
+time-varying and the two drones move according to the trajectories
+defined in the problem.
+
+\section{Deliverable 4: Mathematical Derivations}
+
+Let
+
+\[
+c = \cos t,
+\qquad
+s = \sin t.
+\]
+
+The positions of AV1 and AV2 in the world frame are
+
+\[
+{}^{w}\bm{o}_1 =
+\begin{bmatrix}
+c\\
+s\\
+0
+\end{bmatrix},
+\qquad
+{}^{w}\bm{o}_2 =
+\begin{bmatrix}
+s\\
+0\\
+\cos 2t
+\end{bmatrix}.
+\]
+
+AV1 has zero roll and pitch and yaw equal to $t$. Therefore,
+
+\[
+{}^{w}\bm{R}_1 =
+\begin{bmatrix}
+c & -s & 0\\
+s & c & 0\\
+0 & 0 & 1
+\end{bmatrix}.
+\]
+
+AV2 has the same orientation as the world frame.
+
+\subsection{AV2 Trajectory in the World Frame}
+
+The coordinates of AV2 satisfy
+
+\[
+x_2^w = \sin t,
+\qquad
+y_2^w = 0,
+\qquad
+z_2^w = \cos 2t.
+\]
+
+Using the identity
+
+\[
+\cos 2t = 1 - 2\sin^2 t,
+\]
+
+we obtain
+
+\[
+z_2^w = 1 - 2(x_2^w)^2.
+\]
+
+Hence
+
+\[
+\boxed{
+z_2^w = 1 - 2(x_2^w)^2,
+\qquad
+y_2^w = 0
+}
+\]
+
+which is a parabola in the $x_w$-$z_w$ plane.
+
+\subsection{Position of AV2 Relative to AV1}
+
+The homogeneous transformation of AV1 with respect to the world frame is
+
+\[
+{}^{w}\bm{T}_1 =
+\begin{bmatrix}
+c & -s & 0 & c\\
+s & c & 0 & s\\
+0 & 0 & 1 & 0\\
+0 & 0 & 0 & 1
+\end{bmatrix}.
+\]
+
+Since AV2 does not rotate with respect to the world frame,
+
+\[
+{}^{w}\bm{T}_2 =
+\begin{bmatrix}
+1 & 0 & 0 & s\\
+0 & 1 & 0 & 0\\
+0 & 0 & 1 & \cos 2t\\
+0 & 0 & 0 & 1
+\end{bmatrix}.
+\]
+
+The relative transformation is
+
+\[
+{}^{1}\bm{T}_2 =
+({}^{w}\bm{T}_1)^{-1}
+{}^{w}\bm{T}_2.
+\]
+
+For the translational component,
+
+\[
+{}^{1}\bm{o}_2
+=
+({}^{w}\bm{R}_1)^T
+\left(
+{}^{w}\bm{o}_2 -
+{}^{w}\bm{o}_1
+\right).
+\]
+
+First,
+
+\[
+{}^{w}\bm{o}_2 -
+{}^{w}\bm{o}_1
+=
+\begin{bmatrix}
+s-c\\
+-s\\
+\cos 2t
+\end{bmatrix}.
+\]
+
+Furthermore,
+
+\[
+({}^{w}\bm{R}_1)^T =
+\begin{bmatrix}
+c & s & 0\\
+-s & c & 0\\
+0 & 0 & 1
+\end{bmatrix}.
+\]
+
+Therefore,
+
+\[
+{}^{1}\bm{o}_2 =
+\begin{bmatrix}
+c & s & 0\\
+-s & c & 0\\
+0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+s-c\\
+-s\\
+\cos 2t
+\end{bmatrix}.
+\]
+
+After multiplication,
+
+\[
+\boxed{
+{}^{1}\bm{o}_2(t) =
+\begin{bmatrix}
+\sin t\cos t - 1\\
+-\sin^2 t\\
+\cos 2t
+\end{bmatrix}
+}.
+\]
+
+\subsection{Plane Containing the Relative Trajectory}
+
+From the previous result,
+
+\[
+y_2^1 = -\sin^2 t
+\]
+
+and
+
+\[
+z_2^1 = \cos 2t
+       = 1 - 2\sin^2 t.
+\]
+
+Thus
+
+\[
+z_2^1 = 1 + 2y_2^1.
+\]
+
+Hence every point of the relative trajectory satisfies
+
+\[
+\boxed{
+z_2^1 - 2y_2^1 - 1 = 0
+}.
+\]
+
+The relative trajectory therefore lies entirely in the plane
+
+\[
+\boxed{
+\Pi:\; z - 2y - 1 = 0
+}.
+\]
+
+\subsection{A Two-Dimensional Coordinate Frame on the Plane}
+
+Following the suggested centre, define
+
+\[
+{}^{1}\bm{p} =
+\begin{bmatrix}
+-1\\
+-\frac{1}{2}\\
+0
+\end{bmatrix}.
+\]
+
+The displacement from this point to AV2 is
+
+\[
+\bm{q}
+=
+{}^{1}\bm{o}_2 -
+{}^{1}\bm{p}.
+\]
+
+Substitution gives
+
+\[
+\bm{q}
+=
+\begin{bmatrix}
+\sin t\cos t\\
+\frac{1}{2}-\sin^2 t\\
+\cos 2t
+\end{bmatrix}.
+\]
+
+Using the double-angle identities,
+
+\[
+\sin t\cos t = \frac{1}{2}\sin 2t
+\]
+
+and
+
+\[
+\frac{1}{2}-\sin^2 t
+=
+\frac{1}{2}\cos 2t,
+\]
+
+so
+
+\[
+\bm{q}
+=
+\begin{bmatrix}
+\frac{1}{2}\sin 2t\\
+\frac{1}{2}\cos 2t\\
+\cos 2t
+\end{bmatrix}.
+\]
+
+Choose the orthonormal axes
+
+\[
+\bm{e}_{x_p}
+=
+\begin{bmatrix}
+1\\0\\0
+\end{bmatrix},
+\]
+
+\[
+\bm{e}_{y_p}
+=
+\frac{1}{\sqrt{5}}
+\begin{bmatrix}
+0\\1\\2
+\end{bmatrix},
+\]
+
+and
+
+\[
+\bm{e}_{z_p}
+=
+\frac{1}{\sqrt{5}}
+\begin{bmatrix}
+0\\-2\\1
+\end{bmatrix}.
+\]
+
+The rotation matrix from frame $p$ to frame 1 is therefore
+
+\[
+{}^{1}\bm{R}_{p}
+=
+\begin{bmatrix}
+1 & 0 & 0\\
+0 & \frac{1}{\sqrt{5}} & -\frac{2}{\sqrt{5}}\\
+0 & \frac{2}{\sqrt{5}} & \frac{1}{\sqrt{5}}
+\end{bmatrix}.
+\]
+
+The coordinates in the new frame are
+
+\[
+{}^{p}\bm{o}_2
+=
+({}^{1}\bm{R}_{p})^T
+\bm{q}.
+\]
+
+This yields
+
+\[
+\boxed{
+{}^{p}\bm{o}_2(t)
+=
+\begin{bmatrix}
+\frac{1}{2}\sin 2t\\
+\frac{\sqrt{5}}{2}\cos 2t\\
+0
+\end{bmatrix}
+}.
+\]
+
+The zero third component confirms that the trajectory lies in the
+$x_p$-$y_p$ plane.
+
+\subsection{Ellipse and Semi-Axes}
+
+From
+
+\[
+x_p = \frac{1}{2}\sin 2t
+\]
+
+and
+
+\[
+y_p = \frac{\sqrt{5}}{2}\cos 2t,
+\]
+
+we obtain
+
+\[
+\frac{x_p^2}{(1/2)^2}
+=
+\sin^2 2t
+\]
+
+and
+
+\[
+\frac{y_p^2}{(\sqrt{5}/2)^2}
+=
+\cos^2 2t.
+\]
+
+Adding both expressions,
+
+\[
+\boxed{
+\frac{x_p^2}{1/4}
++
+\frac{y_p^2}{5/4}
+=
+1
+}.
+\]
+
+Therefore, the relative trajectory is an ellipse centred at the origin
+of the $p$ frame.
+
+Its semi-axis lengths are
+
+\[
+\boxed{
+a = \frac{\sqrt{5}}{2},
+\qquad
+b = \frac{1}{2}
+}.
+\]
+
+\section{Deliverable 5: More Properties of Quaternions}
+
+Let a quaternion be represented as
+
+\[
+q =
+\begin{bmatrix}
+q_1&q_2&q_3&q_4
+\end{bmatrix}^T,
+\]
+
+where the first three components form the vector part and $q_4$ is the
+scalar part.
+
+Let
+
+\[
+e =
+\begin{bmatrix}
+0\\0\\0\\1
+\end{bmatrix}
+\]
+
+denote the unit quaternion representing the identity rotation.
+
+The quaternion product satisfies
+
+\[
+q_a \otimes q_b
+=
+\Omega_1(q_a)q_b
+=
+\Omega_2(q_b)q_a.
+\]
+
+\subsection{Orthogonality of $\Omega_1$ and $\Omega_2$}
+
+Quaternion norms are multiplicative:
+
+\[
+\|q_a\otimes q_b\|
+=
+\|q_a\|\|q_b\|.
+\]
+
+For a unit quaternion $q$ and arbitrary $x\in\mathbb{R}^4$,
+
+\[
+\|\Omega_1(q)x\|
+=
+\|q\otimes x\|
+=
+\|q\|\|x\|
+=
+\|x\|.
+\]
+
+Thus $\Omega_1(q)$ preserves the Euclidean norm of every vector.
+Therefore,
+
+\[
+x^T\Omega_1(q)^T\Omega_1(q)x
+=
+x^Tx
+\]
+
+for every $x$, which implies
+
+\[
+\boxed{
+\Omega_1(q)^T\Omega_1(q)=I_4
+}.
+\]
+
+Since $\Omega_1(q)$ is square,
+
+\[
+\boxed{
+\Omega_1(q)\Omega_1(q)^T=I_4
+}.
+\]
+
+Similarly,
+
+\[
+\|\Omega_2(q)x\|
+=
+\|x\otimes q\|
+=
+\|x\|\|q\|
+=
+\|x\|,
+\]
+
+so
+
+\[
+\boxed{
+\Omega_2(q)^T\Omega_2(q)
+=
+\Omega_2(q)\Omega_2(q)^T
+=
+I_4
+}.
+\]
+
+Intuitively, multiplication by a unit quaternion preserves quaternion
+norm. Hence the corresponding linear transformations in
+$\mathbb{R}^4$ must be orthogonal.
+
+\subsection{Mapping $q$ to the Identity Quaternion}
+
+Since the identity quaternion satisfies
+
+\[
+q\otimes e=q,
+\]
+
+we have
+
+\[
+q=\Omega_1(q)e.
+\]
+
+Because $\Omega_1(q)$ is orthogonal,
+
+\[
+\Omega_1(q)^{-1}
+=
+\Omega_1(q)^T.
+\]
+
+Therefore,
+
+\[
+\boxed{
+\Omega_1(q)^Tq=e
+}.
+\]
+
+Similarly,
+
+\[
+e\otimes q=q
+\]
+
+implies
+
+\[
+q=\Omega_2(q)e.
+\]
+
+Hence,
+
+\[
+\boxed{
+\Omega_2(q)^Tq=e
+}.
+\]
+
+Consequently,
+
+\[
+\boxed{
+\Omega_1(q)^Tq
+=
+\Omega_2(q)^Tq
+=
+\begin{bmatrix}
+0\\0\\0\\1
+\end{bmatrix}
+}.
+\]
+
+\subsection{Commutativity of the Two Linear Operators}
+
+Let $x,y,z\in\mathbb{R}^4$. Then
+
+\[
+\Omega_1(x)\Omega_2(y)z
+=
+x\otimes(z\otimes y).
+\]
+
+Quaternion multiplication is associative, so
+
+\[
+x\otimes(z\otimes y)
+=
+(x\otimes z)\otimes y.
+\]
+
+Therefore,
+
+\[
+\Omega_1(x)\Omega_2(y)z
+=
+\Omega_2(y)\Omega_1(x)z.
+\]
+
+Since this holds for every $z$,
+
+\[
+\boxed{
+\Omega_1(x)\Omega_2(y)
+=
+\Omega_2(y)\Omega_1(x)
+}.
+\]
+
+Now define the quaternion conjugate
+
+\[
+\bar{y}
+=
+\begin{bmatrix}
+-y_1\\
+-y_2\\
+-y_3\\
+y_4
+\end{bmatrix}.
+\]
+
+From the definition of $\Omega_2$,
+
+\[
+\Omega_2(y)^T
+=
+\Omega_2(\bar{y}).
+\]
+
+Applying the first commutation result with $\bar{y}$ gives
+
+\[
+\Omega_1(x)\Omega_2(\bar{y})
+=
+\Omega_2(\bar{y})\Omega_1(x).
+\]
+
+Therefore,
+
+\[
+\boxed{
+\Omega_1(x)\Omega_2(y)^T
+=
+\Omega_2(y)^T\Omega_1(x)
+}.
+\]
+
+\section{Conclusion}
+
+The ROS experiments verified the expected rigid-body transformations in
+both the world frame and the moving AV1 frame. The TF-based
+visualization produced a circular trajectory for AV1, a parabolic
+trajectory for AV2 in the world frame, and an elliptical relative
+trajectory for AV2 when expressed in AV1's frame. The analytical
+derivations agree with the observed RViz results.
+
+\end{document}
