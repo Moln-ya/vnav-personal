@@ -1,0 +1,36 @@
+--- a/controller_node.cpp
++++ b/controller_node.cpp
+@@ -58,7 +58,10 @@
+   //
+   // ~~~~ begin solution
+   //
+-  //     **** FILL IN HERE ***
++  ros::Subscriber desired_state_sub_;
++  ros::Subscriber current_state_sub_;
++  ros::Publisher rotor_speed_pub_;
++  ros::Timer control_timer_;
+   //
+   // ~~~~ end solution
+   // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+@@ -124,7 +127,20 @@
+       //
+       // ~~~~ begin solution
+       //
+-      //     **** FILL IN HERE ***
++      desired_state_sub_ = nh.subscribe(
++          "desired_state", 10,
++          &controllerNode::onDesiredState, this);
++
++      current_state_sub_ = nh.subscribe(
++          "current_state", 10,
++          &controllerNode::onCurrentState, this);
++
++      rotor_speed_pub_ = nh.advertise<mav_msgs::Actuators>(
++          "rotor_speed_cmds", 10);
++
++      control_timer_ = nh.createTimer(
++          ros::Duration(1.0 / hz),
++          &controllerNode::controlLoop, this);
+       //
+       // ~~~~ end solution
+ 
