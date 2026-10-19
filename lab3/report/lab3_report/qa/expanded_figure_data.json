@@ -1,0 +1,20 @@
+{
+  "gain_trials": {
+    "unity_circle_initial": {
+      "total": 1999,
+      "selected": 1001,
+      "excluded": 998
+    },
+    "unity_circle_tuned": {
+      "total": 2008,
+      "selected": 1011,
+      "excluded": 997
+    }
+  },
+  "official_full_rows": 2752,
+  "official_steady_rows": 1495,
+  "rotor_command_range_rad_s": [
+    -160.32615245058452,
+    162.32792176052226
+  ]
+}

@@ -1,0 +1,65 @@
+Mono path[0] = '/tmp/tesse-lab3/lab3_Data/Managed'
+Mono config path = '/tmp/tesse-lab3/lab3_Data/MonoBleedingEdge/etc'
+PlayerConnection initialized from /tmp/tesse-lab3/lab3_Data (debug = 0)
+Unknown host QEMU_IFLA type: 67
+Unknown host QEMU_IFLA type: 61
+Unknown host QEMU_IFLA type: 58
+Unknown host QEMU_IFLA type: 63
+Unknown host QEMU_IFLA type: 64
+Unknown host QEMU_IFLA type: 59
+Unknown host QEMU_IFLA type: 60
+Unknown host QEMU_IFLA type: 66
+Unknown host QEMU_IFLA type: 68
+Unknown host QEMU_IFLA type: 69
+Unknown host AF_SPEC type: 45
+Unknown host QEMU_IFLA type: 32830
+Unknown host QEMU_IFLA type: 67
+Unknown host QEMU_IFLA type: 61
+Unknown host QEMU_IFLA type: 58
+Unknown host QEMU_IFLA type: 63
+Unknown host QEMU_IFLA type: 64
+Unknown host QEMU_IFLA type: 59
+Unknown host QEMU_IFLA type: 60
+Unknown host QEMU_IFLA type: 66
+Unknown host QEMU_IFLA type: 68
+Unknown host QEMU_IFLA type: 69
+Unknown host QEMU_IFLA type: 32830
+Unknown host IFA type: 11
+PlayerConnection initialized network socket : 0.0.0.0 55321
+Multi-casting "[IP] 172.17.0.2 [Port] 55321 [Flags] 3 [Guid] 1935146235 [EditorId] 898826642 [Version] 1048832 [Id] LinuxPlayer(172.17.0.2) [Debug] 1 [PackageName] LinuxPlayer [ProjectName] tesse_vnav_scenes" to [225.0.0.222:54997]...
+Waiting for connection from host on [0.0.0.0:55321]...
+Remaining time:8s
+Remaining time:7s
+Remaining time:6s
+Remaining time:5s
+Remaining time:4s
+Remaining time:3s
+Remaining time:2s
+Remaining time:1s
+Remaining time:0s
+Timed out. Continuing without host connection.
+Started listening to [0.0.0.0:55321]
+Starting managed debugger on port 56235
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=0.0.0.0:56235
+* Assertion at mini-exceptions.c:2426, condition `sigaltstack (&sa, NULL) == 0' not met
+
+Caught fatal signal - signo:1952797279 code:1819047246 errno:1601073781 addr:0x495f65736961525f
+Obtained 17 stack frames.
+#0  0x000040039d000b in gsignal
+#1  0x000040039af859 in abort
+#2  0x000041a5440cc8 in mono_dl_fallback_unregister
+#3  0x000041a5451074 in monoeg_g_logv
+#4  0x000041a54511a5 in monoeg_assertion_message
+#5  0x000041a52f9c88 in mono_debugger_run_finally
+#6  0x000041a527cfdd in mono_jit_set_domain
+#7  0x000041a527d3b5 in mono_jit_set_domain
+#8  0x000041a5406817 in mono_thread_pop_appdomain_ref
+#9  0x000041a538afe8 in mono_check_corlib_version
+#10 0x000041a5282da1 in mini_get_debug_options
+#11 0x00004001bc995a in InitializeMonoFromMain(std::vector<core::basic_string<char, core::StringStorageDefault<char> >, std::allocator<core::basic_string<char, core::StringStorageDefault<char> > > > const&, core::basic_string<char, core::StringStorageDefault<char> >, core::basic_string<char, core::StringStorageDefault<char> >, int, char const**, bool)
+#12 0x00004001bd456d in LoadAndInitializeMono(std::vector<core::basic_string<char, core::StringStorageDefault<char> >, std::allocator<core::basic_string<char, core::StringStorageDefault<char> > > > const&, core::basic_string<char, core::StringStorageDefault<char> > const&, core::basic_string<char, core::StringStorageDefault<char> >, core::basic_string<char, core::StringStorageDefault<char> > const&, int, char const**, bool (*)())
+#13 0x00004001c51111 in LoadScriptingRuntime(core::basic_string<char, core::StringStorageDefault<char> > const&, core::basic_string<char, core::StringStorageDefault<char> > const&, int, char**)
+#14 0x00004001c529aa in PlayerMain(int, char**)
+#15 0x000040039b1083 in __libc_start_main
+#16 0x00000000400569 in _start
+qemu: uncaught target signal 6 (Aborted) - core dumped

@@ -1,0 +1,36 @@
+--------------------------------------------------------------------------------
+Node [/controller_node]
+Publications: 
+ * /rosout [rosgraph_msgs/Log]
+ * /rotor_speed_cmds [mav_msgs/Actuators]
+
+Subscriptions: 
+ * /clock [rosgraph_msgs/Clock]
+ * /current_state [nav_msgs/Odometry]
+ * /desired_state [trajectory_msgs/MultiDOFJointTrajectoryPoint]
+
+Services: 
+ * /controller_node/get_loggers
+ * /controller_node/set_logger_level
+
+
+contacting node http://0e71ea2ee1ec:43259/ ...
+Pid: 10238
+Connections:
+ * topic: /rosout
+    * to: /rosout
+    * direction: outbound (40943 - 172.17.0.2:37660) [10]
+    * transport: TCPROS
+ * topic: /desired_state
+    * to: /traj_publisher (http://0e71ea2ee1ec:37811/)
+    * direction: inbound (37008 - 0e71ea2ee1ec:47373) [12]
+    * transport: TCPROS
+
+Type: mav_msgs/Actuators
+
+Publishers: 
+ * /controller_node (http://0e71ea2ee1ec:43259/)
+
+Subscribers: None
+
+

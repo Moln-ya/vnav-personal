@@ -1,0 +1,42 @@
+-------------------------------------------------
+Profile:                     default
+Extending:          [cached] /opt/ros/noetic
+Workspace:                   /tmp/lab3_ws
+-------------------------------------------------
+Build Space:        [exists] /tmp/lab3_ws/build
+Devel Space:        [exists] /tmp/lab3_ws/devel
+Install Space:      [unused] /tmp/lab3_ws/install
+Log Space:          [exists] /tmp/lab3_ws/logs
+Source Space:       [exists] /tmp/lab3_ws/src
+DESTDIR:            [unused] None
+-------------------------------------------------
+Devel Space Layout:          linked
+Install Space Layout:        None
+-------------------------------------------------
+Additional CMake Args:       None
+Additional Make Args:        -j2
+Additional catkin Make Args: None
+Internal Make Job Server:    True
+Cache Job Environments:      False
+-------------------------------------------------
+Buildlisted Packages:        None
+Skiplisted Packages:         None
+-------------------------------------------------
+Workspace configuration appears valid.
+-------------------------------------------------
+[build] Found 4 packages in 0.0 seconds.                                       
+[build] Package table is up to date.                                           
+Starting >>> catkin_simple                  
+Starting >>> mav_msgs                       
+Finished <<< catkin_simple                   [ 0.1 seconds ]
+Finished <<< mav_msgs                        [ 0.3 seconds ]
+Starting >>> controller_pkg                 
+Starting >>> tesse_ros_bridge               
+Finished <<< tesse_ros_bridge                [ 0.5 seconds ]
+Finished <<< controller_pkg                  [ 0.8 seconds ]
+[build] Summary: All 4 packages succeeded!
+[build] Ignored: None.
+[build] Warnings: None.
+[build] Abandoned: No packages were abandoned.
+[build] Failed: No packages failed.
+[build] Runtime: 1.1 seconds total.

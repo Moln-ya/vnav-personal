@@ -1,0 +1,32 @@
+VNAV Lab 3 - Official Unity/TESSE Circular Flight
+
+Student: Junxi Li
+Student ID: 24020036033
+Group: 6
+
+Official RViz Flight Video (GitHub):
+https://github.com/chixin114514/2026Fall_TeamFullcans/blob/main/lab3/report/video/rviz_official_tesse.mp4
+
+Full Flight Recording (GitHub):
+https://github.com/chixin114514/2026Fall_TeamFullcans/blob/main/lab3/report/video/rviz_official_tesse_full.mp4
+
+Recorded trajectory:
+x = 5*sin(t/2)
+y = 5*cos(t/2)
+z = 2
+yaw = -t/2
+
+Official TESSE steady-state results:
+Duration: 55.02 s
+Observed steady laps: 2.376
+3D position RMS error: 0.3063 m
+
+Evidence:
+report/unity_flight.csv
+report/unity_metrics.json
+report/unity_tracking.png
+report/validation.md
+
+Note:
+The original MIT exercise specifies Google Drive or Dropbox.
+Use of GitHub video links is subject to instructor acceptance.

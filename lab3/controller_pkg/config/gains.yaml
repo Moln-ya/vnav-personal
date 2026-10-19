@@ -1,0 +1,11 @@
+# Initial gains for the official m=1 kg, J=I, reversible-rotor simulator.
+# kx: N/m; kv: N*s/m; kr: N*m; komega: N*m*s.
+kx: 6.0
+kv: 4.7
+kr: 64.0
+komega: 16.0
+hz: 1000.0
+state_timeout: 0.5
+desired_timeout: 0.5
+# Deliverable 2's drag is hypothetical; enable only for matching plant drag.
+compensate_drag: false

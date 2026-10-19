@@ -1,0 +1,21 @@
+trajectory t=0.08 s, position=[1.880263, 4.118707, 0.8651562], error=2.209 m
+trajectory t=5.04 s, position=[2.144054, 4.066453, 0.8595815], error=8.247 m
+trajectory t=10.02 s, position=[1.650895, 4.140183, 0.7371824], error=7.078 m
+trajectory t=15.08 s, position=[4.356316, 1.501668, 1.397928], error=0.724 m
+trajectory t=20.08 s, position=[-2.941879, -4.0562, 1.673159], error=0.333 m
+trajectory t=25.08 s, position=[0.009259093, 5.07272, 1.750036], error=0.297 m
+trajectory t=30.08 s, position=[3.156888, -4.020423, 1.799021], error=0.230 m
+trajectory t=35.06 s, position=[-4.918502, 1.259744, 1.66949], error=0.339 m
+trajectory t=40.08 s, position=[4.723901, 1.820639, 1.789008], error=0.229 m
+trajectory t=45.04 s, position=[-2.684226, -4.308162, 1.769798], error=0.281 m
+trajectory t=50.08 s, position=[-0.3761803, 5.071409, 1.744871], error=0.285 m
+trajectory t=55.02 s, position=[3.474039, -3.734323, 1.722597], error=0.305 m
+{
+  "source": "Official MIT Lab3 Unity/TESSE via Box64 0.3.6",
+  "complete_duration": true,
+  "samples": 2752,
+  "trajectory_duration_s": 55.019999999,
+  "steady_position_rms_m": 0.30630605599350413,
+  "steady_position_max_m": 0.5845453007436116,
+  "final_position_error_m": 0.30461954372209715
+}

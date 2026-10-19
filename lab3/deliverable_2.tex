@@ -1,0 +1,266 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[margin=22mm,headheight=15pt,headsep=7mm,footskip=12mm]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{fancyhdr,lastpage}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdftitle={Lab 3 - Deliverable 2: Modelling and Control of UAVs},
+  pdfauthor={Junxi Li},
+  pdfsubject={MIT VNAV 2023 Individual Deliverable 2},
+  pdfkeywords={quadrotor; allocation matrix; geometric control; body drag}
+}
+\usetikzlibrary{arrows.meta,calc}
+\definecolor{ink}{HTML}{142A41}
+\definecolor{accent}{HTML}{126F82}
+\definecolor{muted}{HTML}{566270}
+\definecolor{shade}{HTML}{ECF3F5}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist[itemize]{leftmargin=1.45em,itemsep=1pt,topsep=2pt}
+\setlength{\abovedisplayskip}{7pt}
+\setlength{\belowdisplayskip}{7pt}
+\setlength{\abovedisplayshortskip}{4pt}
+\setlength{\belowdisplayshortskip}{5pt}
+\allowdisplaybreaks[2]
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{muted} VNAV Lab 3 / Individual Deliverable 2}
+\fancyhead[R]{\footnotesize\color{muted} Junxi Li / 24020036033}
+\fancyfoot[L]{\footnotesize\color{muted} 16 October 2026}
+\fancyfoot[R]{\footnotesize\color{muted} \thepage\ / \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+\newcommand{\eThree}{\mathbf e_3}
+\newcommand{\rotor}[4]{%
+  \filldraw[fill=#4,draw=ink!75,line width=.55pt] (#1,#2) circle (.245);
+  \node[font=\scriptsize\bfseries] at (#1,#2) {#3};
+}
+\newcommand{\drone}[3]{%
+  \begin{tikzpicture}[x=1cm,y=1cm,baseline=(current bounding box.center)]
+    \draw[line width=2pt,color=ink!60] (-1.00,.74)--(1.00,-.74);
+    \draw[line width=2pt,color=ink!60] (-1.00,-.74)--(1.00,.74);
+    \filldraw[fill=ink!15,draw=ink] (0,0) circle (.15);
+    \rotor{-1}{.74}{1}{#3}
+    \rotor{-1}{-.74}{2}{#3}
+    \rotor{1}{-.74}{3}{#3}
+    \rotor{1}{.74}{4}{#3}
+    \node[font=\tiny,color=ink] at (-1,.34) {CCW};
+    \node[font=\tiny,color=ink] at (-1,-1.14) {CW};
+    \node[font=\tiny,color=ink] at (1,-1.14) {#2};
+    \node[font=\tiny,color=ink] at (1,.34) {#1};
+  \end{tikzpicture}%
+}
+\begin{document}
+\thispagestyle{empty}
+\noindent
+\begin{minipage}[c]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{ouc_logo.jpg}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.64\linewidth}
+  \raggedleft
+  {\small\color{accent}\bfseries INDIVIDUAL WRITTEN ASSIGNMENT}\par
+  {\small\color{muted} Ocean University of China}\par
+  {\small\color{muted} 2026 Autumn Integrated Robotics Group Project}
+\end{minipage}
+\vspace{6mm}
+\hrule height .7pt
+\vspace{3mm}
+{\LARGE\color{ink}\bfseries Lab 3: Modelling and Control of UAVs}\par
+{\large\color{accent}\bfseries Deliverable 2 --- Mathematical Solutions (20 points)}\par
+\vspace{2mm}
+\begin{tabular}{@{}ll@{}}
+\textbf{Student:} & Junxi Li \quad (24020036033) \\
+\textbf{Group:} & 6 \qquad \textbf{Submission date:} 16 October 2026
+\end{tabular}
+\vspace{2mm}
+\hrule
+
+\section*{A. Structure of quadrotors}
+
+\textbf{Aim.} Determine why exchanging propellers 3 and 4, together with their spin directions, removes the ability to independently track position and yaw. The rotor numbers below follow the \emph{two-quadrotor figure in the MIT exercise}, rather than the different numbering used for the Unity controller.
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}[c]{.46\linewidth}\centering
+\drone{CW}{CCW}{accent!20}\\[-1mm]
+{\small (a) Conventional layout}
+\end{minipage}\hfill
+\begin{minipage}[c]{.46\linewidth}\centering
+\drone{CCW}{CW}{accent!20}\\[-1mm]
+{\small (b) Exchanged propellers 3 and 4}
+\end{minipage}
+\caption{Top-view schematic, redrawn using the rotor positions and directions in the exercise figure. Rotors 1 and 2 keep their spin; the spin directions at positions 3 and 4 reverse. Here $+x$ points right, $+y$ points up, and $+z$ points out of the page.}
+\label{fig:rotors}
+\end{figure}
+
+\subsection*{A.1 Establishing the force--moment map}
+
+Take the distance from the centre of mass to each rotor to be $d>0$ and write $a=d/\sqrt{2}$. In the $xy$ plane of Fig.~\ref{fig:rotors}, rotor centres are
+\begin{equation}
+\begin{aligned}
+\boldsymbol\rho_1&=(-a,\phantom{-}a,0)^\mathsf{T},&
+\boldsymbol\rho_2&=(-a,-a,0)^\mathsf{T},\\
+\boldsymbol\rho_3&=(\phantom{-}a,-a,0)^\mathsf{T},&
+\boldsymbol\rho_4&=(\phantom{-}a,\phantom{-}a,0)^\mathsf{T}.
+\end{aligned}
+\label{eq:rho}
+\end{equation}
+Let $u_i=\omega_i^2\geq0$ denote squared rotor-speed \emph{magnitude}, $c_f>0$ the lift coefficient, and $c_d>0$ the reaction-torque coefficient. Each rotor generates $\mathbf f_i=c_f u_i\eThree$ along body $+z$, so its moment arm contributes
+\begin{equation}
+\boldsymbol\tau_i^{\mathrm{arm}}=\boldsymbol\rho_i\times\mathbf f_i
+=\begin{bmatrix} \rho_{iy}c_fu_i & -\rho_{ix}c_fu_i & 0\end{bmatrix}^{\mathsf T}.
+\label{eq:cross}
+\end{equation}
+A CCW-spinning rotor produces a negative $z$-axis \emph{reaction} moment on the body, while CW spin produces a positive one (the opposite of the rotor spin). Defining
+$\mathbf u=[u_1,u_2,u_3,u_4]^\mathsf T$ and the body wrench $\mathbf w=[f,M_x,M_y,M_z]^\mathsf T$, we therefore have $\mathbf w=F\mathbf u$.
+
+\subsection*{A.2 Healthy quadrotor (a): four independent inputs}
+
+The spin sequence in configuration (a) is (CCW, CW, CCW, CW). Using Eq.~\eqref{eq:cross}, its allocation matrix is
+\begin{equation}
+\boxed{F_a=\begin{bmatrix}
+ c_f&c_f&c_f&c_f\\
+ ac_f&-ac_f&-ac_f&ac_f\\
+ ac_f&ac_f&-ac_f&-ac_f\\
+ -c_d&c_d&-c_d&c_d
+\end{bmatrix}.}
+\label{eq:fa}
+\end{equation}
+On scaling the first three rows by $1/c_f$, $1/(ac_f)$, and $1/(ac_f)$, and the fourth by $1/c_d$, the resulting four rows are nonzero and mutually orthogonal. Equivalently,
+\begin{equation}
+\det F_a=16a^2c_f^3c_d=8d^2c_f^3c_d\ne0,
+\qquad \boxed{\operatorname{rank}(F_a)=4.}
+\label{eq:fa_rank}
+\end{equation}
+Thus, within the usual local actuator limits, the total thrust and the three body moments can be commanded independently by adjusting the four rotor thrusts.
+
+\subsection*{A.3 Modified quadrotor (b): a lost degree of freedom}
+
+In (b) the rotor locations are unchanged, but the third and fourth spin directions exchange: (CCW, CW, CW, CCW). The first three rows of $F$ are unaffected; only the yaw-reaction row changes:
+\begin{equation}
+\boxed{F_b=\begin{bmatrix}
+ c_f&c_f&c_f&c_f\\
+ ac_f&-ac_f&-ac_f&ac_f\\
+ ac_f&ac_f&-ac_f&-ac_f\\
+ -c_d&c_d&c_d&-c_d
+\end{bmatrix}.}
+\label{eq:fb}
+\end{equation}
+The fourth row is now a scalar multiple of the second:
+\begin{equation}
+(F_b)_{4,:}=-\frac{c_d}{ac_f}(F_b)_{2,:},\qquad
+\boxed{\operatorname{rank}(F_b)=3}.\label{eq:fb_rank}
+\end{equation}
+The remaining three rows are independent, but every achievable wrench is constrained by
+\begin{equation}
+\boxed{M_z=-\frac{c_d}{ac_f}M_x.}
+\label{eq:coupled}
+\end{equation}
+The vehicle cannot demand yaw moment without simultaneously demanding a prescribed roll moment. A concrete counterexample is a position-hold trajectory with a time-varying yaw that has $\ddot\Psi_d\ne0$ at some instant. Under the standard symmetric rigid-body model, level position hold implies $M_x=0$ while the changing yaw rate requires $M_z=J_{zz}\ddot\Psi_d\ne0$ (when there is no cross-axis rate). Equation~\eqref{eq:coupled} makes these requirements contradictory.
+
+\textbf{Conclusion for A.} Configuration (b) may still realise \emph{some} special trajectories. What the rank calculation proves is that it cannot, in general, independently track an \emph{arbitrary} prescribed $(x,y,z,\Psi)$ trajectory. It has only three independent components of wrench control.
+
+\section*{B. Controlling a quadrotor with quadratic body drag}
+
+\subsection*{B.1 Express the disturbance in the correct frame}
+
+Let $\mathbf x,\mathbf v\in\mathbb R^3$ be world-frame position and velocity, and let $R\in SO(3)$ map body-frame vectors into world coordinates. The body velocity is $\mathbf v^b=R^\mathsf T\mathbf v$. The drag law in the question can be written without ambiguity as
+\begin{equation}
+\begin{gathered}
+D=\operatorname{diag}(0.1,0.1,0.2),\qquad
+h(\mathbf v^b)=\mathbf v^b\odot|\mathbf v^b|,\\
+\boxed{\mathbf F_D^b=-D\,h(\mathbf v^b)},\qquad
+\boxed{\mathbf F_D^w=R\mathbf F_D^b}.
+\end{gathered}
+\label{eq:drag}
+\end{equation}
+Here $\odot$ and $|\cdot|$ are componentwise. The sign is physically consistent because
+\begin{equation}
+(\mathbf v^b)^\mathsf T\mathbf F_D^b
+=-0.1|v_x^b|^3-0.1|v_y^b|^3-0.2|v_z^b|^3\leq0.
+\label{eq:dissipative}
+\end{equation}
+Hence drag opposes motion. One must rotate this force into the world frame \emph{before} combining it with the world-frame position/velocity feedback terms. Inserting $\mathbf F_D^b$ directly is generally incorrect when $R\ne I$.
+
+\subsection*{B.2 Add model-based compensation to the position loop}
+
+For the laboratory's ROS convention ($+z$ upward; body thrust along $+R\eThree$), the translational dynamics are
+\begin{equation}
+ m\dot{\mathbf v}=-mg\eThree+fR\eThree+\mathbf F_D^w,
+ \qquad \eThree=(0,0,1)^\mathsf T.
+\label{eq:dynamics}
+\end{equation}
+Define tracking errors $\mathbf e_x=\mathbf x-\mathbf x_d$ and $\mathbf e_v=\mathbf v-\dot{\mathbf x}_d$. Without drag, the geometric position loop constructs the desired world force from proportional--derivative feedback, gravity compensation, and reference acceleration. With an estimated drag force $\widehat{\mathbf F}_D^w$ from Eq.~\eqref{eq:drag}, use instead
+\begin{equation}
+\boxed{\mathbf A=-k_x\mathbf e_x-k_v\mathbf e_v
+          +mg\eThree+m\ddot{\mathbf x}_d
+          -\widehat{\mathbf F}_D^w.}
+\label{eq:A}
+\end{equation}
+The \emph{minus} sign is important: since drag already acts against motion, the commanded thrust must generate the extra force that cancels it. For example, if $R=I$ and $\mathbf v^b=(2,0,0)^\mathsf T\,\mathrm{m/s}$, then the estimated drag is $(-0.4,0,0)^\mathsf T\,\mathrm N$, so $-\widehat{\mathbf F}_D^w$ adds $(0.4,0,0)^\mathsf T\,\mathrm N$ to the requested force.
+
+\subsection*{B.3 From compensated force to geometric attitude and thrust}
+
+The force vector must be realised through the vehicle's body $z$ axis. Given a desired yaw $\Psi_d$, choose
+\begin{equation}
+\begin{aligned}
+\mathbf b_{3d}&=\frac{\mathbf A}{\|\mathbf A\|},&
+\mathbf b_{1c}&=\begin{bmatrix}\cos\Psi_d&\sin\Psi_d&0\end{bmatrix}^{\mathsf T},\\
+\mathbf b_{2d}&=\frac{\mathbf b_{3d}\times\mathbf b_{1c}}{\|\mathbf b_{3d}\times\mathbf b_{1c}\|},&
+\mathbf b_{1d}&=\mathbf b_{2d}\times\mathbf b_{3d},\\
+R_d&=\begin{bmatrix}\mathbf b_{1d}&\mathbf b_{2d}&\mathbf b_{3d}\end{bmatrix},&
+f&=\mathbf A^\mathsf T R\eThree.
+\end{aligned}
+\label{eq:att}
+\end{equation}
+These formulae require $\|\mathbf A\|>0$ and a non-degenerate heading cross-product; a numerical implementation should guard these cases. Drag compensation therefore changes not just the scalar thrust command but also the required \emph{tilt} of the vehicle. The $+mg\eThree$ term and the sign of $\mathbf b_{3d}$ match ROS $z$-up; they differ from the paper's $z$-down convention.
+
+The attitude part may then use Lee \emph{et al.}'s geometric errors
+\begin{equation}
+\mathbf e_R=\tfrac12(R_d^\mathsf T R-R^\mathsf T R_d)^\vee,
+\qquad
+\mathbf e_\Omega=\boldsymbol\Omega-R^\mathsf TR_d\boldsymbol\Omega_d.
+\label{eq:rot_error}
+\end{equation}
+With complete desired angular-rate feedforward, a standard moment command is
+\begin{equation}
+\begin{split}
+\mathbf M={}&-k_R\mathbf e_R-k_\Omega\mathbf e_\Omega
++\boldsymbol\Omega\times(J\boldsymbol\Omega)\\
+&-J\!\left(\widehat{\boldsymbol\Omega}R^\mathsf TR_d\boldsymbol\Omega_d
+             -R^\mathsf TR_d\dot{\boldsymbol\Omega}_d\right).
+\end{split}
+\label{eq:moment}
+\end{equation}
+A simplified implementation can neglect the $\boldsymbol\Omega_d$ and $\dot{\boldsymbol\Omega}_d$ terms as allowed in the lab, but that approximation can produce orientation lag. The specified drag force acts at the centre of mass, so it adds no separate moment in this model.
+
+\subsection*{B.4 What the compensation does, and what it does not prove}
+
+Combining Eqs.~\eqref{eq:dynamics} and \eqref{eq:A} gives the exact position-error identity
+\begin{equation}
+\boxed{m\dot{\mathbf e}_v+k_v\mathbf e_v+k_x\mathbf e_x
+=(fR\eThree-\mathbf A)+(\mathbf F_D^w-\widehat{\mathbf F}_D^w).}
+\label{eq:residual}
+\end{equation}
+If attitude tracking is ideal so that $fR\eThree=\mathbf A$, and the drag estimate is exact, the right-hand side vanishes and the desired second-order position-error dynamics follow:
+\begin{equation}
+ m\ddot{\mathbf e}_x+k_v\dot{\mathbf e}_x+k_x\mathbf e_x=0.
+\label{eq:ideal}
+\end{equation}
+Thus compensation can reduce the systematic tracking error that feedback alone must correct, particularly during faster motions. In practice, inaccurate drag coefficients, noisy velocity estimates, delayed ROS messages, rotor limits and attitude tracking errors leave nonzero residuals. For that reason I would compare \emph{the same reference trajectory and evaluation window} with and without compensation before claiming an improvement; the exercise gives a drag \emph{model}, not evidence that an unmodified simulator has exactly this drag.
+
+\section*{References}
+\begin{enumerate}[leftmargin=1.75em,label={[\arabic*]},itemsep=1pt]
+\item MIT VNAV, \emph{Lab 3: Exercises (2023)}, Individual Deliverables 1--2. \url{https://vnav.mit.edu/labs_2023/lab3/exercises.html}.
+\item T. Lee, M. Leok, and N. H. McClamroch, ``Geometric tracking control of a quadrotor UAV on SE(3),'' \emph{49th IEEE Conference on Decision and Control}, pp. 5420--5425, 2010. \href{https://doi.org/10.1109/CDC.2010.5717652}{doi:10.1109/CDC.2010.5717652}.
+\end{enumerate}
+\end{document}

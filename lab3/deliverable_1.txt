@@ -1,0 +1,66 @@
+Lab 3 | Deliverable 1 - Transformations in Practice (10 points)
+Individual submission (ROS 1 / Noetic)
+
+Student: Junxi Li
+Student ID: 24020036033
+Group: 6
+Course: 2026 Autumn Integrated Robotics Group Project
+Date: 16 October 2026
+
+A. Message vs. tf
+----------------
+A1. Convert an incoming geometry_msgs::Quaternion quat_msg to the
+    already-declared tf2::Quaternion quat_tf:
+
+    tf2::fromMsg(quat_msg, quat_tf);
+
+A2. Convert a tf2::Quaternion quat_tf to a newly declared
+    geometry_msgs::Quaternion quat_msg:
+
+    geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
+
+A3. Read only the scalar component (w) of a tf2::Quaternion:
+
+    quat_tf.getW();
+
+    The w() accessor is also available. The scalar part w should not be
+    confused with the quaternion's norm or rotation angle.
+
+B. Conversion
+-------------
+B1. Extract the yaw angle in radians from tf2::Quaternion quat_t
+    with one function call:
+
+    double yaw = tf2::getYaw(quat_t);
+
+B2. Convert geometry_msgs::Quaternion quat_msg to an Eigen 3x3
+    rotation matrix (two conversion/method calls):
+
+    Eigen::Quaterniond q_eigen;
+    tf2::fromMsg(quat_msg, q_eigen);
+    Eigen::Matrix3d R = q_eigen.toRotationMatrix();
+
+    This assumes a valid unit quaternion. If its norm differs from one,
+    reject a zero-norm input and normalize q_eigen before converting.
+    ROS messages store fields as x, y, z, w, whereas Eigen's four-scalar
+    constructor takes w, x, y, z; tf2::fromMsg performs the mapping.
+
+Required ROS 1 / C++ headers
+---------------------------
+#include <geometry_msgs/Quaternion.h>
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/utils.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_eigen/tf2_eigen.h>
+#include <Eigen/Geometry>
+
+References
+----------
+[1] MIT VNAV (2023), Lab 3 Exercises:
+    https://vnav.mit.edu/labs_2023/lab3/exercises.html
+[2] ROS 1 tf2_geometry_msgs conversions (noetic-devel):
+    https://github.com/ros/geometry2/blob/noetic-devel/tf2_geometry_msgs/include/tf2_geometry_msgs/tf2_geometry_msgs.h
+[3] ROS 1 tf2_eigen conversion definitions:
+    https://docs.ros.org/en/lunar/api/tf2_eigen/html/tf2__eigen_8h_source.html
+[4] ROS 1 tf2 Quaternion API (noetic-devel):
+    https://github.com/ros/geometry2/blob/noetic-devel/tf2/include/tf2/LinearMath/Quaternion.h

@@ -1,0 +1,13 @@
+.venv/
+build/
+devel/
+logs/
+report/*.aux
+report/*.log
+report/*.out
+report/*.toc
+*.bag
+*.bag.active
+__pycache__/
+*.pyc
+*.egg-info/

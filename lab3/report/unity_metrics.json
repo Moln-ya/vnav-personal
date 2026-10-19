@@ -1,0 +1,22 @@
+{
+  "source": "Unmodified official MIT Lab3 Unity/TESSE; Box64 0.3.6 on ARM64",
+  "trajectory": "x=5*sin(t/2), y=5*cos(t/2), z=2, yaw=-t/2",
+  "gains": {
+    "kx": 2.0,
+    "kv": 2.4,
+    "kr": 1.8,
+    "komega": 0.7,
+    "hz": 200
+  },
+  "samples": 2752,
+  "trajectory_duration_s": 55.019999999,
+  "steady_start_s": 25.132741228718345,
+  "observed_steady_laps": 2.3755648711366417,
+  "steady_position_rms_m": 0.30630605599350413,
+  "steady_position_max_m": 0.5845453007436116,
+  "steady_altitude_min_m": 1.559839,
+  "steady_altitude_max_m": 1.863796,
+  "steady_radial_rms_m": 0.08292571660246979,
+  "all_values_finite": true,
+  "flight_completed": true
+}

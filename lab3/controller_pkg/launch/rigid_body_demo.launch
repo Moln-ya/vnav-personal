@@ -1,0 +1,16 @@
+<launch>
+  <!-- Development substitute for ARM hosts. This launch does not run TESSE. -->
+  <arg name="rviz" default="true"/>
+  <arg name="duration" default="42.0"/>
+  <arg name="output" default="/tmp/lab3_ros_flight.csv"/>
+  <param name="/use_sim_time" value="true"/>
+  <node name="rigid_body_demo" pkg="controller_pkg" type="rigid_body_demo.py" output="screen">
+    <param name="duration" value="$(arg duration)"/>
+    <param name="output" value="$(arg output)"/>
+  </node>
+  <include file="$(find controller_pkg)/launch/traj_tracking.launch">
+    <arg name="gains_file" value="$(find controller_pkg)/config/gains.yaml"/>
+  </include>
+  <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz"
+        args="-d $(find controller_pkg)/rviz/circle.rviz"/>
+</launch>

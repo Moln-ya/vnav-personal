@@ -1,0 +1,11 @@
+{
+  "plant": "independent rigid-body model, NOT TESSE",
+  "controller": "compiled ROS Noetic controller_node via real ROS topics",
+  "steady_window_trajectory_time_s": [
+    25.139999999,
+    79.759999999
+  ],
+  "steady_position_rms_m": 0.03054535649322837,
+  "steady_position_max_m": 0.05345282208541939,
+  "sample_count": 4000
+}
