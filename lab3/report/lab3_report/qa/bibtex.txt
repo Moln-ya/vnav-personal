@@ -1,8 +1,0 @@
-This is BibTeX, Version 0.99e (TeX Live 2026)
-The top-level auxiliary file: qa/lab3_report.aux
-The style file: unsrtnat.bst
-Database file #1: references.bib
-Warning--empty year in rosgeometry
-Warning--empty year in rosutils
-Warning--empty year in roseigen
-(There were 3 warnings)
