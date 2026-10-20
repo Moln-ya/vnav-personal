@@ -20,6 +20,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--output", required=True)
 parser.add_argument("--duration", type=float, default=50.0)
 parser.add_argument("--wall-timeout", type=float, default=300.0)
+parser.add_argument("--source", default="Official MIT Lab3 TESSE / Box64")
+# RViz trail length; one 4*pi s lap lets the takeoff transient scroll away.
+parser.add_argument("--trail-seconds", type=float, default=120.0)
 args = parser.parse_args()
 rospy.init_node("lab3_unity_monitor", anonymous=True)
 lock = threading.Lock()
@@ -74,8 +77,9 @@ def on_state(msg):
         desired.pose.position.x,desired.pose.position.y,desired.pose.position.z = pd.x,pd.y,pd.z
         desired.pose.orientation = target.rotation
         desired_path.poses.append(desired)
-        actual_path.poses = actual_path.poses[-1200:]
-        desired_path.poses = desired_path.poses[-1200:]
+        trail = int(args.trail_seconds/0.1)
+        actual_path.poses = actual_path.poses[-trail:]
+        desired_path.poses = desired_path.poses[-trail:]
         actual_pub.publish(actual_path)
         desired_pub.publish(desired_path)
 
@@ -90,7 +94,7 @@ marker.pose.position.z = 5
 marker.pose.orientation.w = 1
 marker.scale.z = 0.35
 marker.color.r = marker.color.g = marker.color.b = marker.color.a = 1
-marker.text = "Official MIT Lab3 TESSE / Box64"
+marker.text = args.source
 source_pub.publish(marker)
 started = time.monotonic()
 next_progress = 0
@@ -122,7 +126,7 @@ finally:
     if len(data):
         error = np.linalg.norm(data[:,2:5]-data[:,5:8],axis=1)
         steady = data[:,1] >= min(2*4*math.pi,args.duration/2)
-        summary = dict(source="Official MIT Lab3 Unity/TESSE via Box64 0.3.6",
+        summary = dict(source=args.source,
                        complete_duration=complete, samples=len(data),
                        trajectory_duration_s=float(data[-1,1]),
                        steady_position_rms_m=float(np.sqrt(np.mean(error[steady]**2))) if steady.any() else None,

@@ -1,0 +1,16 @@
+# Official Lab3 Unity on x86_64 with hardware D3D12 rendering (RTX 4060,
+# /current_state at 50 Hz). Tuned on 50 s circle runs, steady window t>=8*pi:
+#   kx 2,  kv 2.4, kr 1.8, komega 0.7 (Box64 gains, earlier run): 0.306 m RMS
+#   kx 14, kv 6,   kr 12, komega 2.2: 0.051 m RMS, radial RMS 7 mm
+#   kx 14, kv 6,   kr 16, komega 2.6: 0.049 m RMS, radial RMS 3 mm
+#   kx 14, kv 6,   kr 20, komega 3.0: 0.037 m RMS, radial RMS 3 mm (repeated)
+#   kx 20, kv 8,   kr 12, komega 2.2: unstable, 1.6 m RMS
+# Too stiff for the low-frame-rate Box64 renderer; use gains_unity.yaml there.
+kx: 14.0
+kv: 6.0
+kr: 20.0
+komega: 3.0
+hz: 200.0
+state_timeout: 1.0
+desired_timeout: 1.0
+compensate_drag: false

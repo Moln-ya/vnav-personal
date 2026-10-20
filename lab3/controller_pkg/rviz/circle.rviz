@@ -13,28 +13,32 @@ Visualization Manager:
     - Class: rviz/Grid
       Name: Ground
       Enabled: true
+      # 10 m x 10 m patch at the world origin, as in the course RViz config.
       Cell Size: 1
-      Plane Cell Count: 20
-      Color: 100; 110; 120
+      Plane Cell Count: 10
+      Color: 160; 160; 164
+      Alpha: 0.6
     - Class: rviz/TF
       Name: Desired frame
       Enabled: true
       Frame Timeout: 1
-      Marker Scale: 0.7
-      Show Arrows: true
+      # Red/green/blue x/y/z axes with frame names, no parent-link arrows.
+      Marker Scale: 5
+      Show Arrows: false
       Show Axes: true
       Show Names: true
     - Class: rviz/Odometry
       Name: Actual vehicle
       Enabled: true
       Topic: /current_state
-      Keep: 1
+      # Body-frame axes along the flight: one every 0.1 m or 0.1 rad, last 100.
+      Keep: 100
       Shape:
         Value: Axes
         Axes Length: 1
-        Axes Radius: 0.07
-      Position Tolerance: 0
-      Angle Tolerance: 0
+        Axes Radius: 0.1
+      Position Tolerance: 0.1
+      Angle Tolerance: 0.1
     - Class: rviz/Path
       Name: Actual path
       Enabled: true
@@ -58,7 +62,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 21
+      Distance: 17
       Pitch: 0.9
       Yaw: 0.7
       Focal Point:

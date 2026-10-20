@@ -1,9 +1,0 @@
-{
-  "source": "Official MIT Lab3 Unity/TESSE via Box64 0.3.6",
-  "complete_duration": true,
-  "samples": 1999,
-  "trajectory_duration_s": 40.0,
-  "steady_position_rms_m": 0.2710110012866323,
-  "steady_position_max_m": 0.44628792343177226,
-  "final_position_error_m": 0.256735462226358
-}

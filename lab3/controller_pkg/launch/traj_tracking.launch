@@ -1,9 +1,12 @@
 <launch>
   <arg name="static_pose" default="false"/>
   <arg name="rviz" default="false"/>
+  <!-- Fly to the circle start, hover, then ramp into the official circle. -->
+  <arg name="takeoff" default="true"/>
   <arg name="gains_file" default="$(find controller_pkg)/config/gains_unity.yaml"/>
   <node name="traj_publisher" pkg="controller_pkg" type="traj_publisher" output="screen">
     <param name="static_pose" value="$(arg static_pose)"/>
+    <param name="takeoff" value="$(arg takeoff)"/>
   </node>
   <node name="controller_node" pkg="controller_pkg" type="controller_node" output="screen">
     <rosparam command="load" file="$(arg gains_file)"/>

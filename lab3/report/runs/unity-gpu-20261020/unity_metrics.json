@@ -1,0 +1,31 @@
+{
+  "source": "Official MIT Lab3 TESSE / GPU",
+  "trajectory": "x=5*sin(t/2), y=5*cos(t/2), z=2, yaw=-t/2",
+  "gains": {
+    "kx": 14.0,
+    "kv": 6.0,
+    "kr": 20.0,
+    "komega": 3.0,
+    "hz": 200.0
+  },
+  "samples": 3355,
+  "trajectory_duration_s": 55.08,
+  "steady_start_s": 25.132741228718345,
+  "observed_steady_laps": 2.3817014202986297,
+  "steady_position_rms_m": 0.04102387318666102,
+  "steady_position_max_m": 0.10251182634527095,
+  "steady_altitude_min_m": 1.981336,
+  "steady_altitude_max_m": 1.988438,
+  "steady_radial_rms_m": 0.0024482213958359317,
+  "steady_radial_max_m": 0.005291424299011638,
+  "steady_altitude_rms_m": 0.015155211878496107,
+  "steady_fit_center_m": [
+    7.34371521376704e-05,
+    2.5419803035831023e-05
+  ],
+  "steady_fit_radius_m": 4.997795632212145,
+  "takeoff_altitude_max_m": 1.981562,
+  "first_laps_position_max_m": 0.08525838496510356,
+  "all_values_finite": true,
+  "flight_completed": true
+}
