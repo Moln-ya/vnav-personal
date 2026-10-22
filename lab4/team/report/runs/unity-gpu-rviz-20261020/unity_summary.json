@@ -1,0 +1,94 @@
+{
+  "source": "Official MIT Lab4 Unity 2019.3.9f1 on native Ubuntu 20.04.6 / ROS1 Noetic (no PRoot); hardware OpenGL 3.3 via Mesa 21.2.6 D3D12 / NVIDIA RTX 4060 with the WSL-provided D3D12 libraries",
+  "trajectory": "minimum snap; z solved separately with zero vertical velocity at gates; per-segment time allocation to |v|<=8 m/s, |a|<=6 m/s^2, |a_z|<=5 m/s^2 within a 0.5 m corridor; reference sampled at each state stamp",
+  "gains": {
+    "kx": 14.0,
+    "kv": 6.0,
+    "kr": 12.0,
+    "komega": 2.2
+  },
+  "trajectory_duration_s": 18.90720972,
+  "rms_tracking_error_m": 0.06271679764020904,
+  "max_tracking_error_m": 0.11346043610070436,
+  "max_gate_center_distance_m": 0.07710527192092563,
+  "final_position_error_m": 0.01691822948774471,
+  "final_hold_s": 10.86,
+  "high_frequency_tilt_rms_deg": 0.09822773729551418,
+  "gate_center_visits": [
+    {
+      "gate": 0,
+      "time_s": 2.0,
+      "min_center_distance_m": 0.03482463106767962
+    },
+    {
+      "gate": 1,
+      "time_s": 3.3999999989999985,
+      "min_center_distance_m": 0.04558085293859732
+    },
+    {
+      "gate": 2,
+      "time_s": 4.68,
+      "min_center_distance_m": 0.07710527192092563
+    },
+    {
+      "gate": 3,
+      "time_s": 6.18,
+      "min_center_distance_m": 0.057592632905608176
+    },
+    {
+      "gate": 4,
+      "time_s": 7.5,
+      "min_center_distance_m": 0.07335773939401301
+    },
+    {
+      "gate": 5,
+      "time_s": 8.900000000000002,
+      "min_center_distance_m": 0.03119451825241142
+    },
+    {
+      "gate": 6,
+      "time_s": 10.099999999000001,
+      "min_center_distance_m": 0.03546902338661181
+    },
+    {
+      "gate": 7,
+      "time_s": 11.279999999000001,
+      "min_center_distance_m": 0.02370490643305669
+    },
+    {
+      "gate": 8,
+      "time_s": 12.599999999000001,
+      "min_center_distance_m": 0.029082234044172973
+    },
+    {
+      "gate": 9,
+      "time_s": 13.959999999,
+      "min_center_distance_m": 0.05805818818599227
+    },
+    {
+      "gate": 10,
+      "time_s": 16.459999999,
+      "min_center_distance_m": 0.07411617008453159
+    },
+    {
+      "gate": 11,
+      "time_s": 18.90720972,
+      "min_center_distance_m": 0.015156847429462463
+    }
+  ],
+  "collisions": "Floor_01 only, around takeoff; none after takeoff",
+  "gate_colours": "Fresh Unity player: every gate red until the drone flies through it.",
+  "metric_note": "unity_flight.csv rebuilt from the rosbag by scripts/rebuild_flight_csv.py.",
+  "checks": {
+    "twelve_ordered_gate_center_visits": true,
+    "all_gate_center_distances_below_0_1m": true,
+    "final_error_below_0_2m": true,
+    "final_hold_at_least_10s": true
+  },
+  "passed": true,
+  "videos": {
+    "unity": "unity_race.mp4 (960x600, 30 fps)",
+    "rviz": "rviz_race.mp4 (1280x800, 30 fps, rviz/race_gpu.rviz)",
+    "duration_s": 32.134
+  }
+}

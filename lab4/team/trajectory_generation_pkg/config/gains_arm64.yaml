@@ -1,0 +1,13 @@
+# Tuned on the official Lab4 Unity simulator under Box64 (4-6 fps).
+# The bridge applies commands at Unity update boundaries; high Lab3 attitude
+# gains become unstable when several physics ticks share one stale command.
+# Unity also uses inertia diag(0.1,0.1,0.2) in its own body axes; the Lab3
+# handout model uses I. These lower torque gains accommodate that difference.
+kx: 1.2
+kv: 2.0
+kr: 1.2
+komega: 0.7
+hz: 200.0
+state_timeout: 1.0
+desired_timeout: 1.0
+compensate_drag: false

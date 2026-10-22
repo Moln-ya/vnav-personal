@@ -1,0 +1,69 @@
+_______________________________________________________________________________
+Warnings << mav_msgs:cmake /tmp/lab4_ws/logs/mav_msgs/build.cmake.004.log
+CMake Warning (dev) at CMakeLists.txt:2 (project):
+  Policy CMP0048 is not set: project() command manages VERSION variables.
+  Run "cmake --help-policy CMP0048" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+
+  The following variable(s) would be set to empty:
+
+    CMAKE_PROJECT_VERSION
+    CMAKE_PROJECT_VERSION_MAJOR
+    CMAKE_PROJECT_VERSION_MINOR
+    CMAKE_PROJECT_VERSION_PATCH
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+cd /tmp/lab4_ws/build/mav_msgs; catkin build --get-env mav_msgs | catkin env -si  /usr/bin/cmake /tmp/lab4_ws/src/mav_msgs --no-warn-unused-cli -DCATKIN_DEVEL_PREFIX=/tmp/lab4_ws/devel/.private/mav_msgs -DCMAKE_INSTALL_PREFIX=/tmp/lab4_ws/install -DCMAKE_BUILD_TYPE=Release; cd -
+
+...............................................................................
+-------------------------------------------------------
+Profile:                     default
+Extending:          [cached] /opt/ros/noetic
+Workspace:                   /tmp/lab4_ws
+-------------------------------------------------------
+Build Space:        [exists] /tmp/lab4_ws/build
+Devel Space:        [exists] /tmp/lab4_ws/devel
+Install Space:      [unused] /tmp/lab4_ws/install
+Log Space:          [exists] /tmp/lab4_ws/logs
+Source Space:       [exists] /tmp/lab4_ws/src
+DESTDIR:            [unused] None
+-------------------------------------------------------
+Devel Space Layout:          linked
+Install Space Layout:        None
+-------------------------------------------------------
+Additional CMake Args:       -DCMAKE_BUILD_TYPE=Release
+Additional Make Args:        -j2
+Additional catkin Make Args: None
+Internal Make Job Server:    True
+Cache Job Environments:      False
+-------------------------------------------------------
+Buildlisted Packages:        None
+Skiplisted Packages:         None
+-------------------------------------------------------
+Workspace configuration appears valid.
+
+NOTE: Forcing CMake to run for each package.
+-------------------------------------------------------
+[build] Found 7 packages in 0.0 seconds.                                       
+[build] Updating package table.                                                
+Starting >>> catkin_simple                           
+Starting >>> mav_msgs                                
+Finished <<< catkin_simple                            [ 1.9 seconds ]
+Finished <<< mav_msgs                                 [ 2.0 seconds ]
+Starting >>> controller_pkg                          
+Starting >>> mav_trajectory_generation               
+Finished <<< mav_trajectory_generation                [ 1.4 seconds ]
+Starting >>> tesse_ros_bridge                        
+Finished <<< controller_pkg                           [ 1.8 seconds ]
+Starting >>> trajectory_generation                   
+Finished <<< trajectory_generation                    [ 2.2 seconds ]
+Starting >>> planner_pkg                             
+Finished <<< planner_pkg                              [ 2.0 seconds ]
+Finished <<< tesse_ros_bridge                         [ 5.0 seconds ]
+[build] Summary: All 7 packages succeeded!
+[build] Ignored: None.
+[build] Warnings: 1 packages succeeded with warnings.
+[build] Abandoned: No packages were abandoned.
+[build] Failed: No packages failed.
+[build] Runtime: 8.5 seconds total.
+[build] Note: Workspace packages have changed, please re-source setup files to use them.

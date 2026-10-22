@@ -1,0 +1,12 @@
+VNAV 2023 Lab4
+
+Unity video:
+report/video/unity_gpu_race.mp4
+
+RViz video:
+report/video/rviz_gpu_race.mp4
+
+ROS1 bag:
+report/runs/unity-gpu-rviz-20261020/unity_race.bag
+
+Trajectory duration: 18.91 s.

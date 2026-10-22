@@ -1,0 +1,3 @@
+PASS: empty input, wait for state, repeated gates, finite states, yaw wrapping, derivatives, endpoint hold
+PASS: invalid waypoint rejection, one coincident gate, minimum segment duration
+PASS: first-gate hover and continuous publication

@@ -1,7 +1,0 @@
-VNAV Lab
-
-Unity simulator video:
-report/video/unity_gpu_sim.mp4
-
-RViz video :
-report/video/rviz_body_frames.mp4

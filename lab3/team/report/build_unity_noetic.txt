@@ -1,0 +1,61 @@
+Processing /workspace/lab3/dependencies/tesse_interface
+Building wheels for collected packages: tesse
+  Building wheel for tesse (setup.py): started
+  Building wheel for tesse (setup.py): finished with status 'done'
+  Created wheel for tesse: filename=tesse-0.1.2-py3-none-any.whl size=16022 sha256=76f31a9b9bd30831ac0f7be3bae8ad54b0570b959ecf213f8592a97af08e03f4
+  Stored in directory: /tmp/pip-ephem-wheel-cache-odyu0xeu/wheels/4e/7d/76/740f2c90a936588adbc6bc6acbf386cb7fef1101efe361536a
+Successfully built tesse
+Installing collected packages: tesse
+  Attempting uninstall: tesse
+    Found existing installation: tesse 0.1.2
+    Uninstalling tesse-0.1.2:
+      Successfully uninstalled tesse-0.1.2
+Successfully installed tesse-0.1.2
+Initialized new catkin workspace in `/tmp/lab3_unity_ws`
+-------------------------------------------------------
+Profile:                     default
+Extending:             [env] /opt/ros/noetic
+Workspace:                   /tmp/lab3_unity_ws
+-------------------------------------------------------
+Build Space:        [exists] /tmp/lab3_unity_ws/build
+Devel Space:        [exists] /tmp/lab3_unity_ws/devel
+Install Space:      [unused] /tmp/lab3_unity_ws/install
+Log Space:         [missing] /tmp/lab3_unity_ws/logs
+Source Space:       [exists] /tmp/lab3_unity_ws/src
+DESTDIR:            [unused] None
+-------------------------------------------------------
+Devel Space Layout:          linked
+Install Space Layout:        None
+-------------------------------------------------------
+Additional CMake Args:       -DCMAKE_BUILD_TYPE=Release
+Additional Make Args:        -j2
+Additional catkin Make Args: None
+Internal Make Job Server:    True
+Cache Job Environments:      False
+-------------------------------------------------------
+Buildlisted Packages:        None
+Skiplisted Packages:         None
+-------------------------------------------------------
+Workspace configuration appears valid.
+
+NOTE: Forcing CMake to run for each package.
+-------------------------------------------------------
+[build] Found 4 packages in 0.0 seconds.                                       
+[build] Updating package table.                                                
+Starting >>> catkin_tools_prebuild               
+Finished <<< catkin_tools_prebuild                [ 2.5 seconds ]
+Starting >>> catkin_simple                       
+Starting >>> mav_msgs                            
+Finished <<< catkin_simple                        [ 2.8 seconds ]
+Finished <<< mav_msgs                             [ 7.3 seconds ]
+Starting >>> controller_pkg                      
+Starting >>> tesse_ros_bridge                    
+Finished <<< tesse_ros_bridge                     [ 9.8 seconds ]
+Finished <<< controller_pkg                       [ 20.2 seconds ]
+[build] Summary: All 5 packages succeeded!
+[build] Ignored: None.
+[build] Warnings: None.
+[build] Abandoned: No packages were abandoned.
+[build] Failed: No packages failed.
+[build] Runtime: 30.1 seconds total.
+[build] Note: Workspace packages have changed, please re-source setup files to use them.

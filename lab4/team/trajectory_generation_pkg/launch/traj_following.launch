@@ -1,0 +1,27 @@
+<launch>
+  <arg name="gains_file" default="$(find trajectory_generation)/config/gains_gpu.yaml"/>
+  <arg name="v_max" default="8.0"/>
+  <arg name="a_max" default="6.0"/>
+  <arg name="a_z_max" default="5.0"/>
+  <arg name="corridor" default="0.5"/>
+  <arg name="time_scale" default="1.0"/>
+  <arg name="level_gates" default="true"/>
+  <arg name="fit_limits" default="true"/>
+  <arg name="sync_to_state" default="true"/>
+  <node name="trajectory_generation_node" pkg="trajectory_generation" type="trajectory_generation_node" output="screen">
+    <param name="v_max" value="$(arg v_max)"/>
+    <param name="a_max" value="$(arg a_max)"/>
+    <param name="a_z_max" value="$(arg a_z_max)"/>
+    <param name="corridor" value="$(arg corridor)"/>
+    <param name="time_scale" value="$(arg time_scale)"/>
+    <param name="level_gates" value="$(arg level_gates)"/>
+    <param name="fit_limits" value="$(arg fit_limits)"/>
+    <param name="sync_to_state" value="$(arg sync_to_state)"/>
+    <param name="publish_rate" value="100.0"/>
+  </node>
+  <node name="controller_node" pkg="controller_pkg" type="controller_node" output="screen">
+    <!-- States arrive here only after their matching desired_state sample. -->
+    <remap from="current_state" to="synced_state" if="$(arg sync_to_state)"/>
+    <rosparam command="load" file="$(arg gains_file)"/>
+  </node>
+</launch>

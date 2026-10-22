@@ -1,0 +1,15 @@
+# Tuned on the official Lab4 Unity player with hardware D3D12 rendering
+# (RTX 4060, ~100 fps), with the reference sampled at each state's stamp
+# (trajectory node sync_to_state). Attitude: sqrt(kr/J)=11 rad/s with Unity's
+# J=0.1. kr=22 tracked slightly better but sometimes broke into 5-12 deg attitude
+# oscillation in hard turns when Unity's step timing varied; kr=12 never did in
+# repeated runs. kx=18 with this kr made hover and tracking worse.
+# Too stiff for the 2-6 fps software/Box64 renderers; use gains_arm64.yaml there.
+kx: 14.0
+kv: 6.0
+kr: 12.0
+komega: 2.2
+hz: 200.0
+state_timeout: 1.0
+desired_timeout: 1.0
+compensate_drag: false

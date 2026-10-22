@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>trajectory_generation</name><version>0.1.0</version>
+  <description>VNAV Lab4 minimum snap position and yaw waypoint follower.</description>
+  <maintainer email="sjamieson@whoi.edu">Stewart Jamieson</maintainer>
+  <license>TODO</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend><depend>geometry_msgs</depend><depend>nav_msgs</depend>
+  <depend>trajectory_msgs</depend><depend>tf</depend><depend>mav_trajectory_generation</depend>
+  <exec_depend>controller_pkg</exec_depend>
+</package>

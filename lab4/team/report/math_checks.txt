@@ -1,0 +1,6 @@
+PASS p=[Fraction(1, 1)] cost=1
+PASS p=[Fraction(1, 1), Fraction(0, 1)] cost=1
+PASS p=[Fraction(1, 1), Fraction(0, 1), Fraction(0, 1)] cost=1
+PASS p=[Fraction(4, 1), Fraction(-3, 1)] cost=4
+PASS p=[Fraction(1, 4), Fraction(9, 2), Fraction(-15, 4)] cost=17/8
+PASS general constraint count, including k=1 and r=1
